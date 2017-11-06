@@ -12,3 +12,36 @@
     
 }
 
+.Cross
+{
+    border: 1px;
+    border-style: solid;
+    background: url(cross.png) no-repeat;  
+    width: 64px;
+    height: 64px;
+}
+
+.Circle
+{
+    border: 1px;
+    border-style: solid;
+    background: url(circle.png) no-repeat;
+    width: 64px;
+    height: 64px;
+}
+
+.Empty
+{
+    border: 1px;
+    border-style: solid;
+    width: 64px;
+    height: 64px;
+}
+
+#TicTacToe 
+{
+    width: 200px;
+    height: 195px;
+    display: flex;
+    flex-wrap: wrap;
+}

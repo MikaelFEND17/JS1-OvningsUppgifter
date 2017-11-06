@@ -182,72 +182,198 @@ function Calculator() {
 
 
 //Tic-Tac-Toe
+var ticTacToe = document.getElementById("TicTacToe");
 
-function TicTacToeGame() {
+ticTacToeGame = new TicTacToeGame(ticTacToe);
+ticTacToeGame.Initialize();
+
+console.log(ticTacToe.childNodes.length);
+
+function TicTacToeGame(ticTacToe) {
     this.board = ["E", "E", "E", "E", "E", "E", "E", "E", "E"];
     this.state = "Running";
     this.turn = "X";
     this.result = "No winner";
+    this.ticTacToe = ticTacToe;
+    this.gameOver = false;
+    this.turnDiv = null; 
 
-    this.ChangeTurn()
+    this.Initialize = function()
     {
-        if (this.turn === "X") {
-            this.turn = "O";
+        for (let i = 0; i < 9; i++)
+        {
+            var newDiv = document.createElement("div");
+            newDiv.id = i;            
+            newDiv.classList.add("Empty");            
+            newDiv.addEventListener("click", function () { ticTacToeGame.PlayerMoveOnSquare(this, i); });
+            this.ticTacToe.appendChild(newDiv);
         }
-        else {
-            this.turn = "X";
-        }
+
+        this.turnDiv = document.createElement("div");
+        this.turnDiv.innerHTML = "Player Turn: " + this.turn;
+        this.ticTacToe.appendChild(this.turnDiv);
     }
 
-    this.CheckWinCondition()
+    this.ChangeTurn = function()
     {
-        if (this.board[0] == this.board[1] && this.board[1] == this.board[2])
-            return true;
-        if (this.board[3] == this.board[4] && this.board[4] == this.board[5])
-            return true;
-        if (this.board[6] == this.board[7] && this.board[7] == this.board[8])
-            return true;
+        if (this.turn === "X") 
+        {
+            this.turn = "O";
+        }
+        else 
+        {
+            this.turn = "X";
+        }
+        
+        this.turnDiv.innerHTML = "Player Turn: " + this.turn;
+    }
 
-        if (this.board[0] == this.board[3] && this.board[3] == this.board[6])
+    this.CheckWinCondition = function()
+    {
+
+        if (this.board[0] != "E" && this.board[0] === this.board[1] && this.board[1] === this.board[2])
+        {
+            this.result = this.turn;
             return true;
-        if (this.board[1] == this.board[4] && this.board[4] == this.board[7])
+        }
+        if (this.board[3] != "E" && this.board[3] === this.board[4] && this.board[4] === this.board[5])
+        {
+            this.result = this.turn;
             return true;
-        if (this.board[2] == this.board[5] && this.board[5] == this.board[8])
+        }
+        if (this.board[6] != "E" && this.board[6] === this.board[7] && this.board[7] === this.board[8])
+        {
+            this.result = this.turn;
             return true;
+        }
+
+        if (this.board[0] != "E" && this.board[0] === this.board[3] && this.board[3] === this.board[6])
+        {
+            this.result = this.turn;
+            return true;
+        }
+        if (this.board[1] != "E" && this.board[1] === this.board[4] && this.board[4] === this.board[7])
+        {
+            this.result = this.turn;
+            return true;
+        }
+        if (this.board[2] != "E" && this.board[2] === this.board[5] && this.board[5] === this.board[8])
+        {
+            this.result = this.turn;
+            return true;
+        }
 
 
-        if (this.board[0] == this.board[4] && this.board[4] == this.board[8])
+        if (this.board[0] != "E" && this.board[0] === this.board[4] && this.board[4] === this.board[8])
+        {
+            this.result = this.turn;
             return true;
-        if (this.board[2] == this.board[4] && this.board[4] == this.board[6])
+        }
+        if (this.board[2] != "E" && this.board[2] === this.board[4] && this.board[4] === this.board[6])
+        {
+            this.result = this.turn;
             return true;
+        }
 
         return false;
     }
 
-    this.GetEmptyCells = function()
+    this.CheckDraw = function()
     {
-        var emptyCells = [];
-        for (var i = 0; i < 9; i++)
+
+        for (var i = 0; i < this.board.length; i++)
         {
             if (this.board[i] === "E")
             {
-                emptyCells.push(i);
+                return false;
             }
         }
-
-        return emptyCells;
+        this.result = "Draw";
+        return true;
     }
 
-    this.ChangeCellValue(index, value)
+    this.PlayerMoveOnSquare = function (square, id) 
     {
-        this.board[index] = value;
+        if (this.gameOver == false) 
+        {
+            if (this.board[id] === "E") 
+            {
+                square.classList.remove("Empty");
+                if (this.turn === "X") 
+                {
+                    this.board[id] = "X";
+                    square.classList.add("Cross");
+                }
+                else 
+                {
+                    this.board[id] = "O";
+                    square.classList.add("Circle");
+                }
+
+                this.gameOver = this.CheckWinCondition();
+                if (this.gameOver == false) 
+                {
+                    this.gameOver = this.CheckDraw();
+                }
+
+                if (this.gameOver == false) 
+                {
+                    this.ChangeTurn();
+                }
+                else 
+                {
+                    if (this.result === "Draw")
+                    {
+                        this.turnDiv.innerHTML = "Game over: " + this.result;
+                    }
+                    else
+                    {
+                        this.turnDiv.innerHTML = "Game over " + this.result + " won";
+                    }
+                    
+                }
+            }
+        }
     }
+
 }
 
 
+//Varukorg
+var varukorg = document.getElementById("Varukorg");
+var varukorgLista = document.getElementById("Varor");
+
+var varukorgKnapp = document.getElementById("AddVara");
+varukorgKnapp.addEventListener("click", function () { varuKorgAdd(varukorgLista.value); });
+
+var varukorgVisaKorg = document.getElementById("ListaVaror");
+varukorgVisaKorg.addEventListener("click", function () { varuKorgShow(); });
 
 
+var minaVaror = new Array();
 
+function varuKorgAdd(value)
+{
+    if (value.length > 0)
+    {
+        minaVaror.push(value);
+        localStorage.setItem("VaruKorg", JSON.stringify(minaVaror));
+    }
+}
 
+function varuKorgShow()
+{
+    var varor = JSON.parse(localStorage.getItem("VaruKorg"));
+console.log();
+    for (var val of varor)
+    {
+        var nyVara = document.createElement("p");
+        var varuText = document.createTextNode(val);
+        nyVara.appendChild(varuText);
+        varukorg.appendChild(nyVara);
+    }
 
+}
 
+//localStorage.setItem("ListToDo", JSON.stringify(this.myToDo));
+//var toDos = JSON.parse(localStorage.getItem("ListToDo"));
